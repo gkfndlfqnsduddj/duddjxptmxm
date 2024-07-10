@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영어 단어 공부</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* 기본 폰트 설정 */
+            margin: 0; /* 바디의 기본 마진 제거 */
+            padding: 0; /* 바디의 기본 패딩 제거 */
+            background-color: #f0f0f0; /* 배경색 설정 */
+        }
+        
+        header {
+            background-color: #333; /* 헤더 배경색 */
+            color: white; /* 헤더 텍스트 색상 */
+            padding: 10px 0; /* 헤더 패딩 */
+            text-align: center; /* 헤더 텍스트 가운데 정렬 */
+        }
+        
+        nav ul {
+            list-style-type: none; /* 리스트 스타일 제거 */
+            padding: 0;
+            text-align: center; /* 네비게이션 가운데 정렬 */
+        }
+        
+        nav ul li {
+            display: inline; /* 항목을 인라인으로 표시 */
+            margin: 0 10px; /* 항목 간의 여백 */
+        }
+        
+        nav ul li a {
+            text-decoration: none; /* 링크 밑줄 제거 */
+            color: white; /* 링크 텍스트 색상 */
+            font-weight: bold; /* 링크 글꼴 굵게 */
+        }
+        
+        main {
+            padding: 20px; /* 메인 패딩 */
+            text-align: center; /* 메인 가운데 정렬 */
+        }
+        
+        .game-container {
+            background-color: #fff; /* 게임 컨테이너 배경색 */
+            padding: 20px;
+            border: 1px solid #ccc;
+            text-align: center;
+            width: 80%;
+            margin: 20px auto;
+        }
+        
+        #definition {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        #guessInput {
+            width: 200px;
+            padding: 10px;
+            margin-right: 10px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        #score {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>영어 단어 공부</h1>
+    </header>
+    
+    <main>
+        <div class="game-container">
+            <p id="definition">사과</p>
+            <form id="guessForm">
+                <input type="text" id="guessInput" placeholder="뜻을 맞춰보세요">
+                <button type="submit">제출</button>
+            </form>
+            <p id="result"></p>
+            <p id="score">정답 수: <span id="correctCount">0</span> / <span id="totalCount">0</span></p>
+        </div>
+    </main>
+
+    <script>
+        // 단어 데이터
+        const words = [
+            { word: 'apple', definition: '사과' },
+            { word: 'banana', definition: '바나나' },
+            { word: 'orange', definition: '오렌지' }
+        ];
+
+        // DOM 요소들
+        const definitionElement = document.getElementById('definition');
+        const guessForm = document.getElementById('guessForm');
+        const guessInput = document.getElementById('guessInput');
+        const resultElement = document.getElementById('result');
+        const correctCountElement = document.getElementById('correctCount');
+        const totalCountElement = document.getElementById('totalCount');
+
+        // 정답 수와 총 문제 수를 기록할 변수
+        let correctCount = 0;
+        let totalCount = 0;
+
+        // 게임 시작 함수
+        function startGame() {
+            // 첫 번째 문제 초기화
+            showNextWord();
+            
+            // 제출 이벤트 핸들러
+            guessForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                let userGuess = guessInput.value.trim().toLowerCase();
+                let currentWord = words[totalCount - 1];
+                
+                if (userGuess === currentWord.word) {
+                    resultElement.textContent = '정답입니다!';
+                    resultElement.style.color = 'green';
+                    correctCount++;
+                } else {
+                    resultElement.textContent = '틀렸습니다. 정답은 ' + currentWord.word + ' 입니다.';
+                    resultElement.style.color = 'red';
+                }
+
+                // 정답 수 업데이트
+                correctCountElement.textContent = correctCount;
+
+                // 다음 문제 준비
+                setTimeout(showNextWord, 2000); // 2초 후에 다음 문제 준비
+            });
+        }
+
+        // 다음 단어 표시 함수
+        function showNextWord() {
+            if (totalCount < words.length) {
+                let currentWord = words[totalCount];
+                definitionElement.textContent = currentWord.definition;
+                guessInput.value = '';
+                resultElement.textContent = '';
+                totalCount++;
+                totalCountElement.textContent = totalCount;
+            } else {
+                alert('모든 문제를 풀었습니다!');
+            }
+        }
+
+        // 게임 시작
+        startGame();
+    </script>
+</body>
+</html>
